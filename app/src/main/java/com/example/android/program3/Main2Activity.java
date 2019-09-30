@@ -1,5 +1,6 @@
 package com.example.android.program3;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -11,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 
 public class Main2Activity extends AppCompatActivity {
+
+    Brick [][] levelOne = new Brick[10][6];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,14 @@ public class Main2Activity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        for(int i=0;i<levelOne.length;i++){
+            for(int j=0;j<levelOne[i].length;j++){
+                Brick b = levelOne[i][j];
+                b.setColor(Color.RED);
+                b.makeBrick();
+            }
+        }
     }
 
 }
