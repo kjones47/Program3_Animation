@@ -8,4 +8,9 @@
     tools:context=".Main2Activity"
     tools:showIn="@layout/activity_main2">
 
+    <LinearLayout
+        android:id="@+id/customViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
