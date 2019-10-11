@@ -8,127 +8,116 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class Surface extends SurfaceView implements SurfaceHolder.Callback {
-
-    private SurfaceHolder holder = null;
+    private SurfaceHolder surfaceHolder = null;
     private Paint paint = null;
-    private float x, y = 0;
-    private String title;
-    private String xAxis;
-    private String yAxis;
-    private int minX;
-    private int maxX;
-    private int minY;
-    private int maxY;
+    private float circleX = 0;
+    private float circleY = 0;
 
     public Surface(Context context) {
         super(context);
-        holder = getHolder();
+
+        surfaceHolder = getHolder();
+
         paint = new Paint();
         paint.setColor(Color.RED);
-        title = "Title";
-        xAxis = "X-axis";
-        yAxis = "Y-axis";
-        minX = 0;
-        minY = 0;
-        maxX = 10;
-        maxY = 100;
+
+        // this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+        // paint.setStyle(Style.FILL);
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder){
-        drawGraph(10,10);
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        drawBall();
     }
-
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int left, int top, int i){
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder){
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         paint = null;
+
     }
 
-    public void drawPoint() {
-        holder = getHolder();
-
-        Canvas c = holder.lockCanvas();
-
-        paint.setColor(Color.BLUE);
-        c.drawCircle(x, y, 10, paint);
-
-        holder.unlockCanvasAndPost(c);
-    }
-
-    public void drawRect()
+    /* This method will be invoked to draw a circle in canvas. */
+    public void drawBall()
     {
-        holder = getHolder();
-        Canvas canvas = holder.lockCanvas();
+        surfaceHolder = getHolder();
 
-
-        // Draw the rectangle.
-        canvas.drawRect(x, y, x + 200, y + 200, paint);
-
-        holder.unlockCanvasAndPost(canvas);
-    }
-
-    public void drawDot(int c, float[]x, float[]y)
-    {
-        holder = getHolder();
-        Canvas canvas = holder.lockCanvas();
-        for(int i=0;i<c;i++){
-            canvas.drawCircle(x[i], y[i], 10, paint);
-        }
-
-
-        holder.unlockCanvasAndPost(canvas);
-    }
-
-    public void drawGraph(int x, int y)
-    {
-        Canvas canvas = holder.lockCanvas();
+        // Get and lock canvas object from surfaceHolder.
+        Canvas canvas = surfaceHolder.lockCanvas();
 
         Paint surfaceBackground = new Paint();
         // Set the surfaceview background color.
-        surfaceBackground.setColor(Color.WHITE);
+        surfaceBackground.setColor(Color.BLACK);
         // Draw the surfaceview background color.
         canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
 
-        // Draw the graph
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(80, 20, 100, this.getHeight() - 80, paint);
-        //paint.setColor(Color.RED);
-        canvas.drawRect(80, this.getHeight()-100, this.getWidth()-50, this.getHeight() - 80 , paint);
+        // Draw the circle.
+        paint.setColor(Color.RED);
+        canvas.drawCircle(circleX, circleY, 100, paint);
 
-        //Draw 0, max X and Y
-        paint.setColor(Color.BLUE);
-        paint.setTextSize(50);
-        canvas.drawText("" + x,0,60,paint);
-        canvas.drawText("0",0,this.getHeight()-20,paint);
-        canvas.drawText("" + y, this.getWidth()-150, this.getHeight()-20, paint);
-        //Draw x and y axis
-        paint.setColor(Color.BLUE);
-        paint.setTextSize(50);
+        canvas.drawCircle(50, 50, 200, paint);
 
-        holder.unlockCanvasAndPost(canvas);
+        // Unlock the canvas object and post the new draw.
+        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
+    /* This method will be invoked to draw a circle in canvas. */
+    public void drawRect()
+    {
+        Canvas canvas = surfaceHolder.lockCanvas();
 
+        Paint surfaceBackground = new Paint();
+        // Set the surfaceview background color.
+        surfaceBackground.setColor(Color.BLUE);
+        // Draw the surfaceview background color.
+        canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
+
+        // Draw the rectangle.
+        canvas.drawRect(circleX, circleY, circleX + 200, circleY + 200, paint);
+
+        surfaceHolder.unlockCanvasAndPost(canvas);
+    }
+
+    public void drawBricks()
+    {
+        Canvas canvas = surfaceHolder.lockCanvas();
+
+        Paint surfaceBackground = new Paint();
+        // Set the surfaceview background color.
+        surfaceBackground.setColor(Color.BLUE);
+        // Draw the surfaceview background color.
+        canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
+
+        // Draw the rectangle.
+        int height = 30;
+        int end = this.getHeight()-100;
+        for(int j = height; j <500; j=j+85) {
+            for (int i = 30; i < this.getWidth(); i = i + 160) {
+                canvas.drawRect(i, j, i + 150, j+ 75, paint);
+            }
+        }
+
+        canvas.drawRect(this.getWidth()/3, this.getHeight()-200, this.getWidth()/2 + 300, this.getHeight()-125, paint);
+        surfaceHolder.unlockCanvasAndPost(canvas);
+    }
 
     public float getCircleX() {
-        return x;
+        return circleX;
     }
 
     public void setCircleX(float circleX) {
-        this.x = circleX;
+        this.circleX = circleX;
     }
 
-    public float getCircleY(){
-        return y;
+    public float getCircleY() {
+        return circleY;
     }
 
     public void setCircleY(float circleY) {
-        this.y = circleY;
+        this.circleY = circleY;
     }
 
     public Paint getPaint() {
@@ -138,5 +127,4 @@ public class Surface extends SurfaceView implements SurfaceHolder.Callback {
     public void setPaint(Paint paint) {
         this.paint = paint;
     }
-
 }
