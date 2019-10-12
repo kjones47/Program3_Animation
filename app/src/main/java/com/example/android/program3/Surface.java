@@ -80,6 +80,28 @@ public class Surface extends SurfaceView implements SurfaceHolder.Callback {
 
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
+    public void drawBallandPaddle()
+    {
+        surfaceHolder = getHolder();
+
+        // Get and lock canvas object from surfaceHolder.
+        Canvas canvas = surfaceHolder.lockCanvas();
+
+        Paint surfaceBackground = new Paint();
+        // Set the surfaceview background color.
+        surfaceBackground.setColor(Color.BLACK);
+        // Draw the surfaceview background color.
+        canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
+
+        // Draw the circle.
+        paint.setColor(Color.RED);
+        canvas.drawCircle(circleX, circleY, 100, paint);
+
+        canvas.drawCircle(50, 50, 200, paint);
+
+        // Unlock the canvas object and post the new draw.
+        surfaceHolder.unlockCanvasAndPost(canvas);
+    }
 
     public void drawBricks()
     {
