@@ -5,11 +5,15 @@ import android.graphics.ColorSpace;
 
 public class Brick {
 
-    boolean hit;
+    boolean show;
     int color = Color.GREEN;
+    int leftX;
+    int rightX;
+    int topY;
+    int bottomY;
 
     public Brick(){
-        hit = false;
+        show = true;
         color = Color.BLUE;
     }
 
@@ -18,11 +22,14 @@ public class Brick {
     }
 
     public void makeBrick(){
-        hit = false;
+        show = true;
     }
 
     public void breakBrick(int c){
-        hit = true;
+        show = false;
+    }
+    public boolean showBrick(){
+            return show;
     }
 
 }

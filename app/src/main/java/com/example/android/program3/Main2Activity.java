@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class Main2Activity extends AppCompatActivity implements View.OnTouchListener {
+public class Main2Activity extends AppCompatActivity implements View.OnTouchListener,View.OnDragListener {
 
     private Button redButton = null;
 
@@ -29,6 +30,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
     private LinearLayout canvasLayout = null;
 
     Surface customSurfaceView = null;
+    private boolean levelComplete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
 
         // Set this as the onTouchListener to process custom surfaceview ontouch event.
         customSurfaceView.setOnTouchListener(this);
-
+        customSurfaceView.setOnDragListener(this);
         // Add the custom surfaceview object to the layout.
         canvasLayout.addView(customSurfaceView);
 
@@ -69,6 +71,9 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
                 drawBall = false;
             }
         });
+
+
+
 
     }
 
@@ -109,7 +114,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
                 Paint paint = new Paint();
                 paint.setColor(Color.RED);
                 customSurfaceView.setPaint(paint);
-
+             //   customSurfaceView.drawPaddle(x,y);
                 customSurfaceView.drawBricks();
             } else {
                 // Create and set a green paint to custom surfaceview.
@@ -118,6 +123,44 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
                 customSurfaceView.setPaint(paint);
 
                 customSurfaceView.drawRect();
+
+
+            }
+
+            // Tell android os the onTouch event has been processed.
+            return true;
+        } else {
+            // Tell android os the onTouch event has not been processed.
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onDrag(View view, DragEvent dragEvent) {
+
+        // If user touch the custom SurfaceView object.
+        if (view instanceof SurfaceView) {
+            view.invalidate();
+
+            float x = dragEvent.getX();
+
+            float y = dragEvent.getY();
+
+            customSurfaceView.setCircleX(x);
+
+            customSurfaceView.setCircleY(y);
+
+            if (drawBall) {
+                // Create and set a red paint to custom surfaceview.
+                Paint paint = new Paint();
+                paint.setColor(Color.RED);
+                customSurfaceView.setPaint(paint);
+             //   customSurfaceView.drawBricks();
+              //  customSurfaceView.drawPaddle(x,y);
+              //  customSurfaceView.drawBall();
+                customSurfaceView.setCircleX(x);
+                customSurfaceView.setCircleY(y);
+
             }
 
             // Tell android os the onTouch event has been processed.
