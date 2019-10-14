@@ -126,6 +126,10 @@ public class Main2Activity extends AppCompatActivity implements View.OnTouchList
 
 
             }
+         /*   if(customSurfaceView.getLives() == 0){
+                    Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+                    startActivity(intent);
+                }*/
 
             // Tell android os the onTouch event has been processed.
             return true;

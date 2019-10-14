@@ -1,6 +1,7 @@
 package com.example.android.program3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -18,6 +19,7 @@ public class Surface extends SurfaceView implements SurfaceHolder.Callback {
     private float paddleY = 0;
     int xdir = 1;
     int ydir = 1;
+    int lives = 3;
     private Brick [][] levelOne = new Brick [5][4];
 
     public Surface(Context context) {
@@ -119,9 +121,12 @@ public class Surface extends SurfaceView implements SurfaceHolder.Callback {
         // Unlock the canvas object and post the new draw.
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
+    public int getLives(){
+        return lives;
+    }
 
-    public void drawBricks()
-    {
+    public void drawBricks() {
+
         Canvas canvas = surfaceHolder.lockCanvas();
 
         Paint surfaceBackground = new Paint();
@@ -130,59 +135,78 @@ public class Surface extends SurfaceView implements SurfaceHolder.Callback {
         // Draw the surfaceview background color.
         canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
 
+        if (lives > 0) {
 
-        // Draw the rectangle.
-        int height = 30;
-        int end = this.getHeight()-100;
-        for(int i = 0; i <levelOne.length; i++) {
-            for (int j = 0; j < levelOne[i].length; j++) {
-                if(levelOne[i][j].showBrick()) {
-                    canvas.drawRect((i) * 200 + 40, (j+1) * 100 + 40, (i+1) *200, (j+2) * 100 , paint);
-                    if(j%2 == 1) {
-                        paint.setColor(Color.GREEN);
-                    }else{
-                        paint.setColor(Color.YELLOW);
+
+
+            // Draw the rectangle.
+            int height = 30;
+            int end = this.getHeight() - 100;
+            for (int i = 0; i < levelOne.length; i++) {
+                for (int j = 0; j < levelOne[i].length; j++) {
+                    if (levelOne[i][j].showBrick()) {
+                        canvas.drawRect((i) * 200 + 40, (j + 1) * 100 + 40, (i + 1) * 200, (j + 2) * 100, paint);
+                        if (j % 2 == 1) {
+                            paint.setColor(Color.GREEN);
+                        } else {
+                            paint.setColor(Color.YELLOW);
+                        }
                     }
                 }
             }
-        }
-        //draw paddle
-        paint.setColor(Color.RED);
-        canvas.drawRect(circleX - this.getWidth()/8, this.getHeight()-200, circleX +this.getWidth()/8, this.getHeight()-125, paint);
+            //draw paddle
+            paint.setColor(Color.RED);
+            canvas.drawRect(circleX - this.getWidth() / 8, this.getHeight() - 200, circleX + this.getWidth() / 8, this.getHeight() - 125, paint);
 
-        //draw ball
-        paint.setColor(Color.WHITE);
-        canvas.drawCircle(ballX, ballY, 50, paint);
-        //ball movement
+            //draw lives
+            paint.setColor(Color.WHITE);
+            int offset = 70;
+            for (int i = 0; i < lives; i++) {
+                canvas.drawCircle(60 + offset * i, 50, 30, paint);
+            }
 
-        if(ballX >= this.getWidth() - 20){
-            xdir= -1;
-        }
-        if(ballX <= 20) {
-            xdir = 1;
-        }
-        if(ballY >= this.getHeight() -300 &&
-                ((ballX > (circleX - this.getWidth()/8))&& (ballX < circleX + this.getWidth()/8))){
-            ydir= -1;
-        }
-        if(ballY >= this.getHeight() - 300){
-            ballX =0;
-            ballY = 0;
-        }
-        if(ballX <= 20) {
-            ydir = 1;
-        }
-        if(xdir == 1) {
-          ballX = ballX + 10;
+            //draw ball
+            paint.setColor(Color.WHITE);
+            canvas.drawCircle(ballX, ballY, 40, paint);
+            //ball movement
+
+            if (ballX >= this.getWidth() - 20) {
+                xdir = -1;
+            }
+            if (ballX <= 20) {
+                xdir = 1;
+            }
+            if (ballY >= this.getHeight() - 270) {
+                if ((ballX > (circleX - this.getWidth() / 8)) && (ballX < circleX + this.getWidth() / 8)) {
+                    ydir = -1;
+                } else {
+                    ballX = 0;
+                    ballY = 0;
+                    lives--;
+                }
+            }
+            if (ballX <= 20) {
+                ydir = 1;
+            }
+            if (xdir == 1) {
+                ballX = ballX + 10;
+            } else {
+                ballX = ballX - 10;
+            }
+            if (ydir == 1) {
+                ballY = ballY + 10;
+            } else {
+                ballY = ballY - 10;
+            }
+
         }else{
-            ballX = ballX - 10;
+            surfaceBackground.setColor(Color.BLACK);
+            // Draw the surfaceview background color.
+            canvas.drawRect(0, 0, this.getWidth(), this.getHeight(), surfaceBackground);
+            paint.setColor(Color.BLUE);
+            paint.setTextSize(148f);
+            canvas.drawText("You Win", 250,500, paint);
         }
-        if(ydir == 1){
-            ballY = ballY + 10;
-        }else{
-            ballY = ballY - 10;
-        }
-
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
